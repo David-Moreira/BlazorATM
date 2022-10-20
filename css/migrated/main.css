@@ -1,0 +1,275 @@
+﻿a[disabled], a[disabled]:hover {
+    pointer-events: none;
+    color: #e1e1e1;
+}
+
+.panel-heading.active {
+    background-color: lightgray;
+}
+
+.accountsListItem > a:first-child {
+    display: inline-block;
+    width: 20em;
+}
+
+#moneyInput {
+    color: black;
+    font-weight: bold;
+}
+/* Helpers */
+.no-margin {
+    margin: 0px;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+/* EndHelpers */
+
+/* Operations */
+.operations-content a:hover {
+    color: #34495E;
+    font-weight: 600;
+}
+
+ul li {
+    line-height: normal;
+    font-size: 16px;
+}
+
+.operations-content .tile {
+    cursor: default;
+}
+
+.operations-content .tile-option:hover {
+    background-color: #e3ecfe;
+    cursor: pointer;
+}
+
+/* EndOperations*/
+h6 {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+/* Login */
+.account-login-form .pin-input {
+    text-align: center;
+    width: 35%;
+    font-size: 30px;
+}
+
+.account-login-form ul {
+    list-style: none;
+}
+
+#pinPad {
+    display: inline-block;
+    float: left;
+}
+
+    #pinPad td {
+        padding: 1rem;
+    }
+
+    #pinPad a {
+        font-size: 3rem;
+        padding: 1rem 3rem;
+    }
+
+#confirmPin {
+    display: block;
+    float: left;
+    margin-left: 8px;
+    margin-top: 1rem;
+}
+
+    #confirmPin input {
+        text-align: center;
+        font-size: 4rem;
+        padding: 5rem 3rem;
+    }
+
+/* ENDLogin */
+
+/* Register */
+.register-link {
+    display: block;
+    text-decoration: none;
+}
+
+    .register-link:hover {
+        border-color: white;
+        text-decoration: none;
+        background-color: beige;
+    }
+/* ENDRegister */
+
+/* Main */
+.atm-logo {
+    font: 900 90px/100px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -2px;
+    margin: 10px 0;
+}
+
+    .atm-logo .logo {
+        background: url(../img/demo/logo-mask.png) center 0 no-repeat;
+        background-size: 236px 181px;
+        height: 181px;
+        margin: 0 auto 26px;
+        overflow: hidden;
+        text-indent: -9999em;
+        width: 236px;
+    }
+
+    .atm-logo small {
+        color: rgba(52, 73, 94, 0.3);
+        display: block;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0;
+        padding-top: 5px;
+    }
+
+    .atm-logo a {
+        text-decoration: none;
+    }
+
+        .atm-logo a:hover {
+            text-decoration: none;
+        }
+
+.btn-padding {
+    padding: 1.5rem 0;
+    font-size: 3rem;
+    width: 6em;
+}
+
+.tab-text-content {
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.side-tab {
+    border: solid .2rem #34495E;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* ENDMain */
+
+#screenView {
+    border: solid .5rem #BDC3C7;
+    border-radius: 1rem;
+    box-shadow: -.2rem .3rem 0rem #95A5A6, .2rem .3rem 0rem #95A5A6;
+}
+
+#cancelTransaction {
+    display: block;
+    float: right;
+    margin-right: 1rem;
+    margin-top: 5.5em;
+}
+
+.tile {
+    border: solid 1px #CCC;
+}
+
+    .tile h6 {
+        font-size: 2rem;
+        padding: 0rem 0;
+    }
+
+    .tile > label {
+        display: block;
+    }
+
+.accountsListItem > span {
+    display: inline-block;
+    width: 20em;
+}
+
+span.icon {
+    display: inline-block;
+    width: 2rem;
+    float: right;
+    color: #BDC3C7;
+}
+
+h4.balance {
+    text-align: left;
+    padding: 0 2em;
+}
+
+    h4.balance span {
+        color: #95A5A6;
+        display: inline-block;
+        width: 6em;
+    }
+
+.modalList {
+    margin-bottom: 1em;
+}
+
+    .modalList > p {
+        font-size: 2rem;
+        text-align: left;
+        margin-bottom: 0;
+        padding: 1rem 0;
+    }
+
+        .modalList > p > span {
+            display: inline-block;
+            width: 18em;
+        }
+
+button.routingButton {
+    margin-top: 1rem;
+    padding: 1em 0;
+    font-size: 2rem;
+    width: 100%;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: solid 1px black;
+    background-color: rgb(18, 23, 36);
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 40px;
+}
+
+/* Site.css defaults */
+body {
+    background-color: white;
+    padding-bottom: 30px;
+    color: #34495e;
+}
+
+input {
+    max-width: 100%;
+}
+
+.apply-border {
+    border-radius: 5px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
