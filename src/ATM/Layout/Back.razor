@@ -1,0 +1,38 @@
+﻿@implements IDisposable
+@if (_showBack)
+{
+    <div class="tile">
+        <a id="back" href="javascript:void(0);" @onclick="NavigateBack" class="btn btn-lg btn-inverse text-uppercase btn-padding"><span class="fui-arrow-left"></span> Back</a>
+    </div>
+}
+
+@code {
+    [Inject] private Navigator Navigator { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+    private bool _showBack;
+    protected override Task OnInitializedAsync()
+    {
+        _showBack = ShowBack();
+        NavigationManager.LocationChanged += OnLocationChanged;
+        return base.OnInitializedAsync();
+    }
+
+    private void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        _showBack = ShowBack();
+        StateHasChanged();
+    }
+
+    private bool ShowBack()
+    => !NavigationManager.Uri.EndsWith("/Operations") && Navigator.CanNavigateBack;
+
+    private void NavigateBack()
+    {
+        Navigator.NavigateBack();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

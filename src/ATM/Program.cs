@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ATM.Security;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ATM.Helpers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -36,6 +38,10 @@ void RegisterAuthServices(IServiceCollection services)
 
 void RegisterAppServices(IServiceCollection services)
 {
+    services.AddScoped<Navigator>();
+
+    services.AddScoped<IUserBankSession, UserBankSession>();
+
     services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
     services.AddScoped<IBankAccountRepo, BankAccountRepo>();
     services.AddScoped<ITransactionRepo, TransactionRepo>();

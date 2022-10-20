@@ -1,0 +1,17 @@
+﻿@using ATM.Security
+<div class="col-xs-12">
+    <div class="tile">
+        <h4 class="text-uppercase balance"><span>Balance</span>€ @_accountBalance</h4>
+    </div>
+</div>
+
+@code {
+    [Inject] public IUserBankSession BankUserSession { get; set; }
+    private decimal _accountBalance;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accountBalance = await BankUserSession.GetCurrentAccountBalance();
+        await base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,108 @@
+﻿@page "/Operations/Withdraw"
+@using ATM.Core.Validation
+
+<EditForm id="form-transferFunds" class="form-horizontal" OnSubmit="HandleSubmit" Model="_transaction">
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="tile">
+                <a id="btn20" @onclick="()=> WithdrawInstant(20)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">20.00 €</a>
+            </div>
+
+            <div class="tile">
+                <a id="btn80" @onclick="()=> WithdrawInstant(80)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">80.00 €</a>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="tile">
+                <a id="btn40" @onclick="()=> WithdrawInstant(40)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">40.00 €</a>
+            </div>
+
+            <div class="tile">
+                <a id="btn100" @onclick="()=> WithdrawInstant(100)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">100.00 €</a>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="tile">
+                <a id="btn60" @onclick="()=> WithdrawInstant(60)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">60.00 €</a>
+            </div>
+
+            <div class="tile">
+                <a id="btn200" @onclick="()=> WithdrawInstant(200)" @onclick:preventDefault class="btn btn-lg btn-primary text-uppercase btn-padding">200.00 €</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h6>Click a button to get that amount of cash.</h6>
+            <h5>or input a multiple of 20 €. Must be lower than 500 €.</h5>
+            <InputNumber @bind-Value="_transaction.Amount" class="form-control" />
+            <div id="pinPad">
+                <table>
+                    <tr>
+                        <td><a id="btn1" href="#" @onclick="()=> Add(1)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">1</a></td>
+                        <td><a id="btn2" href="#" @onclick="()=> Add(2)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">2</a></td>
+                        <td><a id="btn3" href="#" @onclick="()=> Add(3)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">3</a></td>
+                        <td><a id="btn4" href="#" @onclick="()=> Add(4)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">4</a></td>
+                        <td><a id="btn5" href="#" @onclick="()=> Add(5)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">5</a></td>
+                        <td colspan="2"><input type="submit" id="btnConfirm" href="#" class="btn btn-block btn-lg btn-primary text-uppercase" value="Confirm" /></td>
+                    </tr>
+                    <tr>
+                        <td><a id="btn6" href="#" @onclick="()=> Add(6)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">6</a></td>
+                        <td><a id="btn7" href="#" @onclick="()=> Add(7)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">7</a></td>
+                        <td><a id="btn8" href="#" @onclick="()=> Add(8)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">8</a></td>
+                        <td><a id="btn9" href="#" @onclick="()=> Add(9)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">9</a></td>
+                        <td><a id="btn0" href="#" @onclick="()=> Add(0)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">0</a></td>
+                        <td colspan="2"><a id="btnClear" @onclick="Clear" @onclick:preventDefault href="#" class="btn btn-block btn-lg btn-default text-uppercase">Clear</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <ValidationSummary />
+        <ErrorDisplay Errors="Errors" />
+    </div>
+</EditForm>
+
+@code {
+    [Inject] public IUserBankSession UserBankSession { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    private TransactionViewModel _transaction = new();
+    private IEnumerable<OperationError> Errors;
+
+    private async Task HandleSubmit()
+    {
+        Errors = null;
+
+        var result = await UserBankSession.Withdraw(_transaction.Amount);
+        if (!result.Succeeded)
+            Errors = result.Errors;
+        else
+            NavigationManager.NavigateTo("Operations/Success");
+
+        await Clear();
+    }
+
+    private Task Clear()
+    {
+        _transaction.Amount = 0;
+        return Task.CompletedTask;
+    }
+
+    private Task Add(decimal value)
+    {
+        var addedNumber = _transaction.Amount.ToString() + value;
+        _transaction.Amount = decimal.Parse(addedNumber);
+        return Task.CompletedTask;
+    }
+
+    private Task WithdrawInstant(decimal value)
+    {
+        _transaction.Amount = value;
+        return HandleSubmit();
+    }
+}

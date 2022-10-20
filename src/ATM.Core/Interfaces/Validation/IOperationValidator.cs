@@ -8,6 +8,6 @@ namespace ATM.Core.Interfaces.Validation
 
         OperationResult ValidateAmount(decimal amount);
 
-        OperationResult ValidateAmountForPayment(decimal balance, decimal amountToSubtract);
+        OperationResult ValidateAmountForPayment(decimal balance, decimal amountToSubtract, bool validateMultiple20 = true);
     }
 }

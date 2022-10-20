@@ -76,22 +76,22 @@
                             AccountName = registerModel.AccountName,
                             UserID = registerModel.Email
                         });
+
+                var login = new LoginViewModel()
+                    {
+                        Email = registerModel.Email,
+                        Password = registerModel.Password
+                    };
+
+                await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(login);
+
+                NavigationManager.NavigateTo("Operations");
             }
             catch (System.Exception ex)
             {
                 //await UserManager.DeleteAsync(user);
-                //throw;
+                throw;
             }
-
-            await UserSession.Login(new LoginViewModel()
-                {
-                    Email = registerModel.Email,
-                    Password = registerModel.Password
-                });
-
-            ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(registerModel.Email);
-
-            NavigationManager.NavigateTo("");
         }
     }
 }

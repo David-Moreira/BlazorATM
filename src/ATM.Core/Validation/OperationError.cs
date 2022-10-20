@@ -17,6 +17,12 @@ namespace ATM.Core.Validation
             Description = error.ToString();
         }
 
+        public OperationError(Error error, string description)
+        {
+            Code = (int)error;
+            Description = description;
+        }
+
         public enum Error
         {
             InvalidOperation,

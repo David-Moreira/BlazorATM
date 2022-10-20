@@ -1,0 +1,19 @@
+﻿@using ATM.Core.Validation
+
+@if (Errors is not null && Errors.Any())
+{
+    <div class="text-danger" style="display:inline-block">
+        The following error(s) have occurred:
+        <ul>
+        @foreach (var error in Errors)
+        {
+                <li>
+                    @error.Description</li>
+        }
+        </ul>
+    </div>
+
+}
+@code {
+    [Parameter] public IEnumerable<OperationError> Errors { get; set; }
+}

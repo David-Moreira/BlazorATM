@@ -11,11 +11,6 @@ namespace ATM.Infrastructure.Data
     {
         private readonly ATMDBContext _dbContext;
 
-        public RepositoryBase()
-        {
-            _dbContext = new ATMDBContext();
-        }
-
         public RepositoryBase(ATMDBContext dbContext)
         {
             _dbContext = dbContext;

@@ -6,5 +6,9 @@ namespace ATM.Infrastructure.Repositories
 {
     public class BankAccountRepo : RepositoryBase<BankAccount>, IBankAccountRepo
     {
+        public BankAccountRepo(ATMDBContext dbContext) : base(dbContext)
+        {
+
+        }
     }
 }

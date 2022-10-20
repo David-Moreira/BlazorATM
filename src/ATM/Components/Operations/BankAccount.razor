@@ -1,0 +1,85 @@
+﻿@implements IDisposable
+@using ATM.Security
+@if (Account is not null)
+{
+    var isActive = (Account.AccountNumber == currentAccountNumber) ? "active" : "";
+
+    <div @key="Account.AccountNumber" class="panel-group" id="accordion-account" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class='panel-heading @isActive ' role="tab" id="heading-account">
+                <h6 class="text-uppercase text-left accountsListItem">
+                    <a href="" @onclick="SelectAccount" @onclick:preventDefault>
+                        <span>@Account.AccountName</span>
+                    </a>
+                    @Account.AccountNumber
+                    <a @onclick="Collapser" @onclick:preventDefault class="glyphicon @collapseIconState icon pull-right account-collapser" data-toggle="collapse" data-parent="#accordion-account" href="#collapseAccount-@Account.AccountNumber" aria-expanded="true" aria-controls="collapseAccount"></a>
+                </h6>
+            </div>
+
+            <div id="collapseAccount-@Account.AccountNumber" class='panel-collapse @collapseState out' role="tabpanel" aria-labelledby="heading-account">
+                <div class="panel-body">
+                    <div class="row">
+                        <label for="AccountHolder" class="col-md-3 text-bold">Account Holder</label>
+                        <label class="col-md-9">
+                            @Account.AccountHolder
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label for="AccountBalance" class="col-md-3 text-bold">Account Balance</label>
+                        <label class="col-md-9">
+                            @Account.AccountBalance
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    [Inject] public IUserBankSession UserBankSession { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+
+    [Parameter] public AvailableAccountsViewModel Account { get; set; }
+    [Parameter] public EventCallback<AvailableAccountsViewModel> OnSelectedAccount { get; set; }
+
+    private string currentAccountNumber;
+    private string collapseIconState = "glyphicon-chevron-down";
+    private string collapseState = "collapse";
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserBankSession.OnCurrentAccountChanged += CurrentAccountChanged;
+        currentAccountNumber = await UserBankSession.GetCurrentAccountNumber();
+        await base.OnInitializedAsync();
+    }
+
+    private void CurrentAccountChanged(object sender, string accountNumber)
+    {
+        this.currentAccountNumber = accountNumber;
+        StateHasChanged();
+    }
+
+    private void Collapser()
+    {
+        if (collapseIconState == "glyphicon-chevron-down")
+        {
+            collapseIconState = "glyphicon-chevron-up";
+            collapseState = "";
+        }
+        else
+        {
+            collapseIconState = "glyphicon-chevron-down";
+            collapseState = "collapse";
+        }
+    }
+
+    public void Dispose()
+    {
+        UserBankSession.OnCurrentAccountChanged -= CurrentAccountChanged;
+    }
+
+    private Task SelectAccount()
+    {
+        return OnSelectedAccount.InvokeAsync(Account);
+    }
+}

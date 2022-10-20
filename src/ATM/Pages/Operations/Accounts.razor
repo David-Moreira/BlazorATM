@@ -1,0 +1,67 @@
+﻿@page "/Operations/Accounts"
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+
+                <a id="lnkCreateAccount" @onclick:preventDefault role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+
+                    CREATE NEW BANK ACCOUNT                    <span @onclick="CollapserNewAccount" class="glyphicon @newAccountCollapseIconState icon pull-right account-collapser"></span>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse @newAccountCollapseState out" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <CreateBankAccount />
+            </div>
+        </div>
+    </div>
+</div>
+
+<form>
+    @{
+        foreach (var item in availableAccounts)
+        {
+            <BankAccount Account="item" OnSelectedAccount="SelectAccount" />
+        }
+    }
+</form>
+
+@code {
+    [Inject] public IUserBankSession UserBankSession { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    private IEnumerable<AvailableAccountsViewModel> availableAccounts;
+    private string currentAccountNumber;
+    private string newAccountCollapseIconState = "glyphicon-chevron-down";
+    private string newAccountCollapseState = "collapse";
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentAccountNumber = await UserBankSession.GetCurrentAccountNumber();
+        availableAccounts = await UserBankSession.GetAvailableAccounts();
+        await base.OnInitializedAsync();
+    }
+    private async Task SelectAccount(AvailableAccountsViewModel account)
+    {
+        if (currentAccountNumber == account.AccountNumber)
+            return;
+        await UserBankSession.SelectAccount(account.AccountNumber);
+        currentAccountNumber = await UserBankSession.GetCurrentAccountNumber();
+    }
+
+    private void CollapserNewAccount()
+    {
+        if (newAccountCollapseIconState == "glyphicon-chevron-down")
+        {
+            newAccountCollapseIconState = "glyphicon-chevron-up";
+            newAccountCollapseState = "";
+        }
+        else
+        {
+            newAccountCollapseIconState = "glyphicon-chevron-down";
+            newAccountCollapseState = "collapse";
+        }
+    }
+
+}

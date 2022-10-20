@@ -1,9 +1,12 @@
 ﻿@page "/Account/Login"
 @using ATM.Security
 <div class="account-login-form">
-    <EditForm class="form-horizontal" Model="@_login" OnValidSubmit="HandleSubmit">
+    <EditForm class="form-horizontal" Model="@_login" OnValidSubmit="HandleSubmit" OnInvalidSubmit="HandleInvalidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <div class="text-danger" style="margin-top:10px">
+            <ValidationSummary />
+        </div>
+
         <div class="col-xs-8 text-center" style="border-right:solid 3px #CCC">
             <h1 class="demo-section-title text-uppercase text-center">Input Your Pin Number</h1>
 
@@ -11,6 +14,15 @@
             <div class="form-group">
                 <div class="col-md-12">
                     <InputText class="form-control pin-input center-block" type="password" readonly @bind-Value="@_login.Password"></InputText>
+
+                    <div class="text-danger">
+                        @if (_loginError)
+                        {
+                            <p>Invalid login attempt.</p>
+                        }
+
+
+                    </div>
                 </div>
             </div>
 
@@ -63,7 +75,9 @@
 @code {
     [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] private IUserSession UserSession { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
     private LoginViewModel _login = new();
+    private bool _loginError;
 
     private void NumClick(int value)
     {
@@ -76,9 +90,25 @@
         _login.Password = string.Empty;
     }
 
+    private Task HandleInvalidSubmit()
+    {
+        _loginError = false;
+        return Task.CompletedTask;
+    }
+
     private async Task HandleSubmit()
     {
+        _loginError = false;
         var result = await UserSession.Login(_login);
-        ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(_login.Email);
+        if (result)
+        {
+            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(_login);
+            NavigationManager.NavigateTo("Operations");
+        }
+        else
+        {
+            _loginError = true;
+            Clear();
+        }
     }
 }

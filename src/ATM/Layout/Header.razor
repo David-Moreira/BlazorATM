@@ -1,22 +1,18 @@
 ﻿<div class="demo-headline" style="padding:0px;">
     <h1 class="atm-logo">
-        
-        @if (auth)
-        {
-            <a href="\Operations">
-                ATM
-                <small>24 Hour Banking</small>
-            </a>
-        }
-        else
-        {
-            <a href="\">
-                ATM
-                <small>24 Hour Banking</small>
-            </a>
-        }
+        <AuthorizeView>
+            <Authorized>
+                <a href="\Operations">
+                    ATM
+                    <small>24 Hour Banking</small>
+                </a>
+            </Authorized>
+            <NotAuthorized>
+                <a href="\">
+                    ATM
+                    <small>24 Hour Banking</small>
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
     </h1>
 </div>
-@code{
-    private bool auth;
-}

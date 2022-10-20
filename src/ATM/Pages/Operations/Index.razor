@@ -1,0 +1,57 @@
+﻿@page "/Operations"
+@using ATM.Core.Validation
+@using ATM.Security
+
+<div class="operations-content">
+    <div class="col-xs-4">
+        <a href="" @onclick="QuickCash" @onclick:preventDefault>
+            <div class="tile tile-option">
+                <img src="images/quick_cash.png" alt="Quick Cash" class="tile-image big-illustration">
+                <h3 class="tile-title">Quick Cash <br />(10 €)</h3>
+                <p>Get cash now without looking at account!</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xs-4">
+        <a href="/Operations/Accounts">
+            <div class="tile tile-option">
+                <img src="images/accounts_checklist.png" alt="Accounts" class="tile-image">
+                <h3 class="tile-title">Select Account(s)</h3>
+                <p>View available accounts, check balances, and more...</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xs-4">
+        <a href="/Operations/AccountOperations">
+            <div class="tile tile-option">
+                <img src="images/deposit_vault.png" alt="Operations" class="tile-image">
+                <h3 class="tile-title">Bank Operations</h3>
+                <p>
+                    Deposits, Withdraw or transfer funds.
+                </p>
+            </div>
+        </a>
+    </div>
+</div>
+<ErrorDisplay Errors="errors" />
+@code {
+    [Inject] NavigationManager NavigationManager { get; set; }
+    [Inject] IUserBankSession UserBankSession { get; set; }
+    private IEnumerable<OperationError> errors;
+
+    public async Task QuickCash()
+    {
+        errors = null;
+        var result = await UserBankSession.QuickCash();
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("Operations/Success");
+        }
+        else
+        {
+            errors = result.Errors;
+        }
+    }
+}

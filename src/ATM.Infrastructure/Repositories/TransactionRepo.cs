@@ -6,5 +6,9 @@ namespace ATM.Infrastructure.Repositories
 {
     public class TransactionRepo : RepositoryBase<Transaction>, ITransactionRepo
     {
+        public TransactionRepo(ATMDBContext dbContext) : base(dbContext)
+        {
+
+        }
     }
 }

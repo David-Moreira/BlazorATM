@@ -1,0 +1,42 @@
+﻿@page "/Operations/DepositCash"
+
+<EditForm class="form-horizontal" OnSubmit="HandleSubmit" Model="_transaction">
+    <DataAnnotationsValidator />
+
+    <div class="col-xs-6">
+
+        <blockquote>Insert cash monies into slot labeled "Insert Cash" when light turns green. Click <strong>DONE</strong> to complete transaction.</blockquote>
+
+        <div class="tile">
+            <h4 class="text-uppercase"><div class="palette-clouds">Balance</div>€ @_accountBalance</h4>
+        </div>
+
+        <div class="tile">
+            <h4 class="text-uppercase"><div class="palette-clouds">Inserted Cash</div><InputNumber @bind-Value="_transaction.Amount" class="text-center apply-border" /></h4>
+        </div>
+
+        <button id="done" type="submit" class="btn btn-lg btn-success text-uppercase btn-padding" style="width:100%; margin-bottom:1rem"><span class='fui-check'></span> Done</button>
+        <ValidationSummary />
+    </div>
+
+    <div class="col-xs-6" style="border:solid 1px #CCC; border-top:none; border-bottom:none;">
+        <img src="images/InsertCashMoneyAnimations.gif" style="width:18em;" />
+    </div>
+</EditForm>
+
+@code {
+    [Inject] public IUserBankSession BankUserSession { get; set; }
+    private decimal _accountBalance;
+    private TransactionViewModel _transaction = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _accountBalance = await BankUserSession.GetCurrentAccountBalance();
+        await base.OnInitializedAsync();
+    }
+    private async Task HandleSubmit(){
+        
+        await BankUserSession.Deposit(_transaction.Amount);
+        _accountBalance = await BankUserSession.GetCurrentAccountBalance();
+    }
+        
+}

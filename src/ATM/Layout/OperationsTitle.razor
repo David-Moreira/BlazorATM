@@ -1,0 +1,40 @@
+﻿@implements IDisposable
+@using ATM.Core.Interfaces.Services
+@using ATM.Security
+<div class="row no-margin">
+
+    <div class="col-xs-12">
+
+        <h1 class="demo-section-title text-uppercase"> Operations </h1>
+    </div>
+
+    <div class="col-xs-12">
+        <h8><b>Account #:</b> @accountNumber</h8>
+    </div>
+</div>
+
+@code {
+    [Inject] public IUserBankSession UserBankSession { get; set; }
+
+    private string accountNumber;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserBankSession.OnCurrentAccountChanged += CurrentAccountChanged;
+        accountNumber = await GetAccountNumber();
+        await base.OnInitializedAsync();
+    }
+    private void CurrentAccountChanged(object sender, string accountNumber)
+    {
+        this.accountNumber = accountNumber;
+        StateHasChanged();
+    }
+
+    private Task<string> GetAccountNumber()
+        => UserBankSession.GetCurrentAccountNumber();
+
+    public void Dispose()
+    {
+        UserBankSession.OnCurrentAccountChanged -= CurrentAccountChanged;
+    }
+}

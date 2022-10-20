@@ -1,0 +1,22 @@
+﻿@using ATM.Security
+<AuthorizeView>
+    <Authorized>
+        <form id="logoutForm" class="navbar-right">
+            <div class="tile">
+                <a id="logout" @onclick="Logout" @onclick:preventDefault class="btn btn-lg btn-info text-uppercase btn-padding"><span class="fui-user"></span> Logout</a>
+            </div>
+        </form>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    private async Task Logout()
+    {
+        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        NavigationManager.NavigateTo("");
+    }
+}

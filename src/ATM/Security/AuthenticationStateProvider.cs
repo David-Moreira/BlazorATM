@@ -1,4 +1,7 @@
 ﻿
+using ATM.Models;
+using ATM.Pages.Account;
+
 using Microsoft.AspNetCore.Components.Authorization;
 
 using System.Net.Http.Headers;
@@ -27,18 +30,24 @@ namespace ATM.Security
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, loggedInUser.Email) }, "dummy")));
         }
 
-        public void MarkUserAsAuthenticated(string email)
+        public async Task MarkUserAsAuthenticated(LoginViewModel login)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "dummy"));
-            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
-            NotifyAuthenticationStateChanged(authState);
+            var result = await _userSession.Login(login);
+
+            if (result)
+            {
+                var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login.Email) }, "dummy"));
+                var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+                NotifyAuthenticationStateChanged(authState);
+            }
         }
 
-        public void MarkUserAsLoggedOut()
+        public Task MarkUserAsLoggedOut()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(anonymousUser));
             NotifyAuthenticationStateChanged(authState);
+            return Task.CompletedTask;
         }
 
     }

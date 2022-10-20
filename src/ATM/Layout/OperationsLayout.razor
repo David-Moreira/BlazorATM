@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<body>
+    <div class="container">
+        <Header />
+        <div class="row">
+            <div class="col-xs-12" id="screenView">
+                <div class="col-xs-9">
+                    <OperationsTitle />
+                    @Body
+                </div>
+                <div class="col-xs-3">
+                    <br />
+                    <br />
+                    <br />
+                    
+                    <Back />
+                    <LoggedInStatus />
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <Footer />
+</body>

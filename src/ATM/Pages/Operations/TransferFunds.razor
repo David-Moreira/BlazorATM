@@ -1,0 +1,236 @@
+﻿@page "/Operations/TransferFunds"
+@using ATM.Core.Validation
+
+<div class="col-xs-12">
+    <blockquote>Transfer funds from one account to another. You can type in a routing number of another account that is not in your available accounts. </blockquote>
+</div>
+<div class="col-xs-6">
+    <div class="tile">
+        <h5>From:</h5>
+        <button @onclick="OpenFromModal" class="btn btn-block btn-lg btn-inverse"><h6 id="mainFromAccount">@_model.accountNumber</h6></button>
+    </div>
+</div>
+
+<div class="col-xs-6">
+    <div class="tile">
+        <h5>To:</h5>
+        <button @onclick="OpenToModal" class="btn btn-block btn-lg btn-inverse"><h6 id="mainToAccount">@_model.recipientAccountNumber</h6></button>
+    </div>
+</div>
+<div class="col-xs-12">
+    <blockquote><h6>Click on an account number to change to a different account.</h6></blockquote>
+</div>
+
+
+<EditForm id="form-transferFunds" class="form-horizontal" OnValidSubmit="HandleSubmit" Model="_model">
+    <DataAnnotationsValidator />
+
+    <div class="col-xs-12">
+        <h6>Amount to Transfer:</h6>
+        <InputNumber @bind-Value="_model.Amount" class="form-control"></InputNumber>
+        <div id="pinPad">
+            <table>
+                <tr>
+                    <td><a id="btn1" href="#" @onclick="()=> Add(1)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">1</a></td>
+                    <td><a id="btn2" href="#" @onclick="()=> Add(2)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">2</a></td>
+                    <td><a id="btn3" href="#" @onclick="()=> Add(3)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">3</a></td>
+                    <td><a id="btn4" href="#" @onclick="()=> Add(4)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">4</a></td>
+                    <td><a id="btn5" href="#" @onclick="()=> Add(5)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">5</a></td>
+                </tr>
+                <tr>
+                    <td><a id="btn6" href="#" @onclick="()=> Add(6)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">6</a></td>
+                    <td><a id="btn7" href="#" @onclick="()=> Add(7)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">7</a></td>
+                    <td><a id="btn8" href="#" @onclick="()=> Add(8)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">8</a></td>
+                    <td><a id="btn9" href="#" @onclick="()=> Add(9)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">9</a></td>
+                    <td><a id="btn0" href="#" @onclick="()=> Add(0)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">0</a></td>
+                    <td colspan="2"><a id="btnClear" @onclick="Clear" @onclick:preventDefault href="#" style="font-size:2.5rem" class="btn btn-block btn-lg btn-default text-uppercase">Clear</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <ValidationSummary />
+        <ErrorDisplay Errors="Errors" />
+    </div>
+
+    <div class="col-xs-12" style="margin-bottom: 2rem;">
+        <button type="submit" class="btn btn-block btn-lg btn-success"><h6><span class="fui-check"></span> Confirm Transfer</h6></button>
+    </div>
+
+</EditForm>
+
+
+
+@if (showFromModal)
+{
+    <!-- Modal fromAccount -->
+    <div class="modal show" id="fromAccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Available Accounts</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>Select from an available account below.</p>
+
+                    <div id="divFromAccounts">
+                        @foreach (var from in availableFrom)
+                        {
+                            @accountFromFragment(from)
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button @onclick="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal toAccount -->
+@if (showToModal)
+{
+    <div class="modal show" id="toAccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Available Accounts</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Input Routing Number</p>
+                    <input type="text" id="toAccountCustom" class="form-control" />
+                    <button type="button" id="btnRouteNumber" class="btn btn-primary text-uppercase routingButton">Use Routing Number</button>
+                    <p>or select from an available account below.</p>
+
+                    <div id="divToAccounts">
+                        @foreach (var to in availableTo)
+                        {
+                            @accountToFragment(to)
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button @onclick="Cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private RenderFragment<AvailableAccountsViewModel> accountFromFragment => item => __builder =>
+    {
+        <a href="javascript:void(0)" @onclick="() => SelectFromAccount(item.AccountNumber)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse text-uppercase modalList">
+            <p>
+                <span id="txtAccountName">
+                    @item.AccountName
+                </span>
+                <span id="txtAccountNumber">
+                    @item.AccountNumber
+                </span>
+            </p>
+        </a>
+    };
+
+    private RenderFragment<AvailableAccountsViewModel> accountToFragment => item => __builder =>
+    {
+        <a href="javascript:void(0)" @onclick="() => SelectToAccount(item.AccountNumber)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse text-uppercase modalList">
+            <p>
+                <span id="txtAccountName">
+                    @item.AccountName
+                </span>
+                <span id="txtAccountNumber">
+                    @item.AccountNumber
+                </span>
+            </p>
+        </a>
+    };
+
+    private Task Cancel()
+    {
+        showFromModal = false;
+        showToModal = false;
+        return Task.CompletedTask;
+    }
+
+    private Task OpenFromModal()
+    {
+        showFromModal = true;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task OpenToModal()
+    {
+        showToModal = true;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task SelectFromAccount(string accountNumber)
+    {
+        _model.accountNumber = accountNumber;
+        if (_model.recipientAccountNumber == accountNumber)
+            _model.recipientAccountNumber = string.Empty;
+        showFromModal = false;
+        return Task.CompletedTask;
+    }
+
+    private Task SelectToAccount(string accountNumber)
+    {
+        _model.recipientAccountNumber = accountNumber;
+        showToModal = false;
+        return Task.CompletedTask;
+    }
+
+    [Inject] public IUserBankSession UserBankSession { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    private TransferFundsViewModel _model = new();
+    private bool showFromModal;
+    private bool showToModal;
+
+    private IEnumerable<AvailableAccountsViewModel> availableFrom;
+    private IEnumerable<AvailableAccountsViewModel> availableTo;
+
+    private IEnumerable<OperationError> Errors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model.recipientAccountNumber = "";
+        _model.accountNumber = await UserBankSession.GetCurrentAccountNumber();
+        availableFrom = await UserBankSession.GetAvailableAccounts();
+        availableTo = availableFrom.Where(x => x.AccountNumber != _model.accountNumber);
+        await base.OnInitializedAsync();
+    }
+
+    private async Task HandleSubmit()
+    {
+        var result = await UserBankSession.TransferFunds(_model);
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("Operations/Success");
+            return;
+        }
+        else
+            Errors = result.Errors;
+    }
+
+    private Task Add(decimal value)
+    {
+        var addedNumber = _model.Amount.ToString() + value;
+        _model.Amount = decimal.Parse(addedNumber);
+        return Task.CompletedTask;
+    }
+
+    private Task Clear()
+    {
+        _model.Amount = 0;
+        return Task.CompletedTask;
+    }
+}

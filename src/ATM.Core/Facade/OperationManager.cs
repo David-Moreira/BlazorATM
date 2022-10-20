@@ -13,14 +13,12 @@ namespace ATM.Core.Facade
         private readonly IOperationValidator _operationValidator;
 
         private BankAccount _bankAccount;
-        private Transaction _transaction;
 
         public OperationManager(IBankAccountService bankManager, ITransactionService transactionManager, IOperationValidator operationValidator)
         {
             _operationValidator = operationValidator;
             _bankManager = bankManager;
             _transactionManager = transactionManager;
-            _transaction = new Transaction();
         }
 
         //Have to rethink this with transactions
@@ -29,6 +27,8 @@ namespace ATM.Core.Facade
             var result = _operationValidator.ValidateAmount(amount);
             if (!result.Succeeded)
                 return result;
+
+            var _transaction = new Transaction();
 
             _bankAccount = _bankManager.GetByAccountNumber(accountNumber);
             _bankAccount.Balance += amount;
@@ -50,6 +50,8 @@ namespace ATM.Core.Facade
             var result = _operationValidator.ValidateAmountForPayment(_bankAccount.Balance, amount);
             if (!result.Succeeded)
                 return result;
+
+            var _transaction = new Transaction();
 
             _bankAccount.Balance -= amount;
             _transaction.AccountNumber = accountNumber;
@@ -83,9 +85,11 @@ namespace ATM.Core.Facade
         {
             _bankAccount = _bankManager.GetByAccountNumber(accountNumber);
 
-            var result = _operationValidator.ValidateAmountForPayment(_bankAccount.Balance, 10);
+            var result = _operationValidator.ValidateAmountForPayment(_bankAccount.Balance, 10, false);
             if (!result.Succeeded)
                 return result;
+
+            var _transaction = new Transaction();
 
             _bankAccount.Balance -= 10;
             _transaction.AccountNumber = accountNumber;
@@ -107,6 +111,8 @@ namespace ATM.Core.Facade
             var result = _operationValidator.ValidateAmountForPayment(_bankAccount.Balance, amount);
             if (!result.Succeeded)
                 return result;
+
+            var _transaction = new Transaction();
 
             _bankAccount.Balance -= amount;
             recipientAcc.Balance += amount;
@@ -135,6 +141,8 @@ namespace ATM.Core.Facade
             var result = _operationValidator.ValidateAmountForPayment(_bankAccount.Balance, amount);
             if (!result.Succeeded)
                 return result;
+
+            var _transaction = new Transaction();
 
             _bankAccount.Balance -= amount;
             _transaction.AccountNumber = accountNumber;
