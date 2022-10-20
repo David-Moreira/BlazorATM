@@ -1,0 +1,79 @@
+﻿@page "/Account/Login"
+<div class="account-login-form">
+    <EditForm class="form-horizontal" Model="@_login" OnValidSubmit="HandleSubmit">
+        <div class="col-xs-8 text-center" style="border-right:solid 3px #CCC">
+            <h1 class="demo-section-title text-uppercase text-center">Input Your Pin Number</h1>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <InputText class="form-control pin-input center-block" type="password" readonly @bind-Value="@_login.Password"></InputText>
+                </div>
+            </div>
+
+            <div id="pinPad">
+                <table>
+                    <tr>
+                        <td><a id="btn1" @onclick="() => NumClick(1)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">1</a></td>
+                        <td><a id="btn2" @onclick="() => NumClick(2)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">2</a></td>
+                        <td><a id="btn3" @onclick="() => NumClick(3)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">3</a></td>
+                    </tr>
+                    <tr>
+                        <td><a id="btn4" @onclick="() => NumClick(4)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">4</a></td>
+                        <td><a id="btn5" @onclick="() => NumClick(5)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">5</a></td>
+                        <td><a id="btn6" @onclick="() => NumClick(6)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">6</a></td>
+                    </tr>
+                    <tr>
+                        <td><a id="btn7" @onclick="() => NumClick(7)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">7</a></td>
+                        <td><a id="btn8" @onclick="() => NumClick(8)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">8</a></td>
+                        <td><a id="btn9" @onclick="() => NumClick(9)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">9</a></td>
+                    </tr>
+                    <tr>
+                        <td><a id="btn0" @onclick="() => NumClick(0)" @onclick:preventDefault class="btn btn-block btn-lg btn-inverse">0</a></td>
+                        <td colspan="2"><a id="btnClear" @onclick="Clear" class="btn btn-block btn-lg btn-default text-uppercase">Clear</a></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="confirmPin">
+                <input type="submit" class="btn btn-block btn-lg btn-success text-uppercase" value="Confirm" />
+            </div>
+            <div id="cancelTransaction">
+                <a href="/" class="btn btn-block btn-lg btn-danger text-uppercase"><span class="fui-cross"></span> Cancel</a>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <h1 class="demo-section-title text-uppercase text-center">Email</h1>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <InputText class="form-control" @bind-Value="_login.Email"></InputText>
+                </div>
+            </div>
+            <div style="margin-top:8rem;">
+                <img src="/images/CardInsertedGreenLight.png" style="width:16em;" />
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private LoginViewModel _login = new();
+
+    private void NumClick(int value)
+    {
+        _login.Password += value;
+        StateHasChanged();
+    }
+
+    private void Clear()
+    {
+        _login.Password = string.Empty;
+    }
+
+    private Task HandleSubmit()
+    {
+        return Task.CompletedTask;
+    }
+}
+

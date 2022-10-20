@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ATM.Security;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -27,14 +29,8 @@ await builder.Build().RunAsync();
 
 void RegisterAuthServices(IServiceCollection services)
 {
-
-    services.AddOidcAuthentication(options =>
-    {
-        // Configure your authentication provider options here.
-        // For more information, see https://aka.ms/blazor-standalone-auth
-        builder.Configuration.Bind("Local", options.ProviderOptions);
-    });
-
+    services.AddScoped<IUserSession, UserSession>();
+    services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 }
 
 void RegisterAppServices(IServiceCollection services)
