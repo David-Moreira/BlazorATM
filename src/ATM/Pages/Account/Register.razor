@@ -1,0 +1,62 @@
+﻿@page "/Account/Register"
+<h2>Register</h2>
+
+<EditForm class="form-horizontal" Model="registerModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <hr />
+
+    <div class="form-group">
+        <label for="AccountName" class="col-md-2 control-label">Account Name</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.AccountName" DisplayName="Account Name" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="FirstName" class="col-md-2 control-label">First Name</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.FirstName" DisplayName="First Name" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="LastName" class="col-md-2 control-label">Last Name</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.LastName" DisplayName="Last Name" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Email" class="col-md-2 control-label">Email</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.Email" DisplayName="Email" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Password" class="col-md-2 control-label">Pin</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.Password" DisplayName="Pin" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="ConfirmPassword" class="col-md-2 control-label">Confirm Pin</label>
+        <div class="col-md-10">
+            <InputText @bind-Value="registerModel.ConfirmPassword" DisplayName="Confirm Pin" class="form-control"></InputText>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a href="\" class="btn btn-lg btn-danger text-uppercase"><span class="fui-cross"></span> Cancel</a>
+            <input type="submit" class="btn btn-lg btn-primary text-uppercase" value="Register" />
+        </div>
+    </div>
+</EditForm>
+
+@code{
+    private RegisterViewModel registerModel = new();
+
+    private void HandleValidSubmit()
+    {
+        //Logger.LogInformation("HandleValidSubmit called");
+
+        // Process the valid form
+    }
+}

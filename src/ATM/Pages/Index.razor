@@ -1,0 +1,32 @@
+﻿@page "/"
+<div class="col-xs-8 text-center">
+
+    @if (!auth)
+    {
+        <a href="\Login\Account"><img src="/images/InsertCardAnimate.gif" alt="Login" /></a>
+    }
+    else
+    {
+        <h1 class="demo-section-title text-uppercase text-center">Insert Card to Begin</h1>
+        <a href="\Operations\Index">Go to Operations</a>
+    }
+</div>
+
+<div class="col-xs-4">
+    <br />
+    <a class="register-link" href="\Account\Register">
+        <div class="side-tab">
+
+            <div class="tab-text-content center-block">
+                <span>Register your card </span>
+                <div>
+                    <i class="fa fa-2x fa-credit-card"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+@code{
+    private bool auth;
+}
