@@ -24,9 +24,9 @@ jobs:
       run: dotnet publish src/ATM/ATM.csproj -c Release -o release --nologo
     
     
-      # changes the base-tag in index.html from '/' to 'ATM' to match GitHub Pages repository subdirectory
+      # changes the base-tag in index.html from '/' to 'BlazorATM' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to ATM
-      run: sed -i 's/<base href="\/" \/>/<base href="\/ATM\/" \/>/g' release/wwwroot/index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/BlazorATM\/" \/>/g' release/wwwroot/index.html
 
     - name: copy index.html to 404.html
       run: cp release/wwwroot/index.html release/wwwroot/404.html
