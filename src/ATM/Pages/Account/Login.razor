@@ -61,7 +61,7 @@
 </div>
 
 @code {
-    [Inject] private CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] private IUserSession UserSession { get; set; }
     private LoginViewModel _login = new();
 
@@ -79,8 +79,6 @@
     private async Task HandleSubmit()
     {
         var result = await UserSession.Login(_login);
-        if (result)
-            CustomAuthenticationStateProvider.MarkUserAsAuthenticated(_login.Email);
+        ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(_login.Email);
     }
 }
-

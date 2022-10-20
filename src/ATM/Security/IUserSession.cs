@@ -1,5 +1,7 @@
 ﻿using ATM.Models;
 
+using Microsoft.AspNetCore.Components.Authorization;
+
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -24,21 +26,23 @@ namespace ATM.Security
         public UserSession()
         {
         }
+
+
         Dictionary<string, User> _userStore = new();
         private User _loggedInUser;
 
-        public Task<bool> Login(LoginViewModel loginViewModel)
+        public async Task<bool> Login(LoginViewModel loginViewModel)
         {
             if (_userStore.TryGetValue(loginViewModel.Email, out var user))
             {
                 if (user.Password != loginViewModel.Password)
-                    return Task.FromResult(false);
+                    return false;
 
                 _loggedInUser = user;
-                return Task.FromResult(true);
+                return true;
             }
             else
-                return Task.FromResult(false);
+                return false;
         }
 
         public Task<User> GetLoggedInUser()
