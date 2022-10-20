@@ -58,6 +58,7 @@
     [Inject] private IUserSession UserSession { get; set; }
     [Inject] private IBankAccountService BankManager { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
+    [Inject] private CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
 
     private async Task HandleValidSubmit()
     {
@@ -87,6 +88,7 @@
                     Email = registerModel.Email,
                     Password = registerModel.Password
                 });
+            CustomAuthenticationStateProvider.MarkUserAsAuthenticated(registerModel.Email);
 
             NavigationManager.NavigateTo("");
         }

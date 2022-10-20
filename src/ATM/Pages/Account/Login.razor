@@ -1,6 +1,9 @@
 ﻿@page "/Account/Login"
+@using ATM.Security
 <div class="account-login-form">
     <EditForm class="form-horizontal" Model="@_login" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <div class="col-xs-8 text-center" style="border-right:solid 3px #CCC">
             <h1 class="demo-section-title text-uppercase text-center">Input Your Pin Number</h1>
 
@@ -58,6 +61,8 @@
 </div>
 
 @code {
+    [Inject] private CustomAuthenticationStateProvider CustomAuthenticationStateProvider { get; set; }
+    [Inject] private IUserSession UserSession { get; set; }
     private LoginViewModel _login = new();
 
     private void NumClick(int value)
@@ -71,9 +76,11 @@
         _login.Password = string.Empty;
     }
 
-    private Task HandleSubmit()
+    private async Task HandleSubmit()
     {
-        return Task.CompletedTask;
+        var result = await UserSession.Login(_login);
+        if (result)
+            CustomAuthenticationStateProvider.MarkUserAsAuthenticated(_login.Email);
     }
 }
 

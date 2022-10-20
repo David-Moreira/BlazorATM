@@ -21,6 +21,9 @@ namespace ATM.Security
     //Very simple dumbed down in memory version...
     public class UserSession : IUserSession
     {
+        public UserSession()
+        {
+        }
         Dictionary<string, User> _userStore = new();
         private User _loggedInUser;
 
@@ -32,7 +35,6 @@ namespace ATM.Security
                     return Task.FromResult(false);
 
                 _loggedInUser = user;
-
                 return Task.FromResult(true);
             }
             else

@@ -30,7 +30,10 @@ await builder.Build().RunAsync();
 void RegisterAuthServices(IServiceCollection services)
 {
     services.AddScoped<IUserSession, UserSession>();
+    services.AddScoped<CustomAuthenticationStateProvider>();
     services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+    builder.Services.AddAuthorizationCore();
 }
 
 void RegisterAppServices(IServiceCollection services)
