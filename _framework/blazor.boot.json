@@ -8,7 +8,7 @@
   "resources": {
     "assembly": {
       "ATM.Core.dll": "sha256-1mn4CmodwxFr4ci2w+2QdN2r7IjCeFOujhkbDc1lpr4=",
-      "ATM.dll": "sha256-9WvqGJyO+1QtqnXIe58aDirMtb2je1JuLCUh2CCp9j4=",
+      "ATM.dll": "sha256-IplfIx8j6nX9RZYKQX9PsuX4e+U45XEYHpZFTZmV1yA=",
       "ATM.Infrastructure.dll": "sha256-\/5soySrXdqHciRSQeP3YYFTrzktTRQAmq690mmJdnWk=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-iWcka6a\/\/MYYRpK1S34\/QVHgJG3xjsz1IKDF\/ih269I=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-Nw4bHJW3PbTgufKJPn+9qOhEUYWpgArd\/EIlICq\/rjQ=",
